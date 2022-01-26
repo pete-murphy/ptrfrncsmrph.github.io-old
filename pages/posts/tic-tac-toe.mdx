@@ -1,0 +1,68 @@
+import { page as Page } from "@purescript/Page";
+export default Page;
+
+export const meta = {
+  date: "December 31, 2020",
+  description:
+    "Building tic-tac-toe in PureScript (using `purescript-react-basic-hooks`)",
+};
+
+# Tutorial Intro to React in PureScript
+
+## What are we building?
+
+In this tutorial, we're going to build a game of tic-tac-toe.
+It will be identical in functionality to the end result of the [official React tutorial](https://reactjs.org/tutorial/tutorial.html), but we'll be using PureScript (specifically the `purescript-react-basic-hooks` library) and leveraging a functional programming approach.
+We'll also be building a parallel implementation using TypeScript and `fp-ts`, for sake of comparison.
+The final result in PureScript can be found here, and the final TypeScript version here.
+The hope is that the three versions (the original JavaScript, the functional-style TypeScript, and the idiomatic PureScript) might serve as a Rosetta Stone-style reference for newcomers to PureScript who are already familiar with one of the other two.
+
+<!-- The reader is encouraged to work through the original tutorial if you haven't yet, and we will be assuming some familiarity with React. We  -->
+
+## Prerequisites
+
+We'll assume some familiarity with the original tutorial, so the reader is encouraged to work through that if you haven't already.
+Though we won't necessarily assume familiarity with PureScript, we also won't be going too far in depth in our coverage of the basics of the language.
+For a more in-depth guide to PureScript from first principles, I would recommend [_PureScript by Example_](https://book.purescript.org/).
+This guide is instead intended as an in-road to PureScript for those already familiar with React, and who might benefit from seeing how React's concepts are expressed in this language.
+
+## Setup for the Tutorial
+
+### Setup Option 1: Write Code in the Browser
+
+TODO
+
+### Setup Option 2: Local Development Environment
+
+TODO
+
+<!-- ### Starting Point
+
+The starting point  -->
+
+### The Type of a React Component
+
+Following the original, we are going to split our tic-tac-toe app into three React components: `game`, `board` and `square` (names of values start with lowercase in PureScript, so we're not following the React convention of "user-defined components must be capitalized").
+We tend to think of components in React, especially those that have no internal state or use any hooks, as literal functions that take some `props` type as input and return some `JSX`.
+In PureScript we could then represent the type of a `Component` as just that.
+
+<MultiCodeBlock>
+
+```purescript
+type Component props = props -> JSX
+```
+
+```typescript
+type Component<Props> = (props: Props) => JSX;
+```
+
+</MultiCodeBlock>
+
+This definition, while correct in a naive sense, is not the whole of the picture in the React execution context(?).
+React advises defining components at the module-level, instead of inside the function body of other components, for example.
+This is because React relies on referential equality between component instances in its reconciliation.
+This reliance on referential equality violates the sensibilities of a language such as PureScript hwere one expects to be able to reason equationally.
+I.e., the meaning and behavior of some value `foo` shouldn't depend in what context `foo` is defined.
+In [this example](https://codesandbox.io/s/re-rendering-lists-9iweo?file=/src/App.js:652-661), `List` and `ListAlias` would be equivalent under equational reasoning, but it is plain to see they are not.
+To reflect this, in PureScript this is encoded as "effectful" to encourage components to be instantiated in a "bootstrapping" phase, instead of inside of a render cycle.
+See also the explanation from the library author here: https://github.com/spicydonuts/purescript-react-basic-hooks/issues/12

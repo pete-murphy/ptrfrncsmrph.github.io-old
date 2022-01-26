@@ -1,8 +1,9 @@
 module Next where
 
 import Foreign (Foreign)
-import Foreign.Object (Object)
 import React.Basic.Hooks (Component, JSX)
+import Type.Row.Homogeneous (class Homogeneous)
+import Unsafe.Coerce (unsafeCoerce)
 
 mkHead ::
   Component
@@ -10,12 +11,17 @@ mkHead ::
     }
 mkHead = head_
 
+components :: forall r. Homogeneous r (Foreign -> JSX) => Record r -> MDXComponents 
+components r = unsafeCoerce r
+
 mkMDXProvider ::
   Component
     { children :: Array JSX
-    , components :: Object (Foreign -> JSX)
+    , components :: MDXComponents
     }
 mkMDXProvider = mdxProvider_
+
+data MDXComponents
 
 foreign import head_ ::
   Component
@@ -24,5 +30,5 @@ foreign import head_ ::
 foreign import mdxProvider_ ::
   Component
     { children :: Array JSX
-    , components :: Object (Foreign -> JSX)
+    , components :: MDXComponents
     }

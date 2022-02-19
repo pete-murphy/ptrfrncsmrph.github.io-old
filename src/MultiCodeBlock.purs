@@ -14,6 +14,9 @@ import React.Basic.Events as Events
 import React.Basic.Hooks (Component, (/\))
 import React.Basic.Hooks as Hooks
 import Unsafe.Coerce as Coerce
+import Color as Color
+import React.Basic.Emotion (Style)
+import React.Basic.Emotion as E
 
 data Language
   = PureScript
@@ -28,7 +31,10 @@ instance Show Language where
     Haskell -> "Haskell"
     Rust -> "Rust"
 
-mkMultiCodeBlock :: Component { children :: Array InternalPropsType }
+type CodeBlockProps
+  = { props :: { children :: { props :: { className :: String } } } }
+
+mkMultiCodeBlock :: Component { children :: Array CodeBlockProps }
 mkMultiCodeBlock = do
   multiCodeBlock_ <- mkMultiCodeBlock_
   Hooks.component "MultiCodeBlock" \{ children } -> Hooks.do
@@ -58,7 +64,7 @@ mkMultiCodeBlock_ =
         )
     pure (DOM.div_ [ buttons <> Comonad.extract state ])
 
-parseLanguage :: InternalPropsType -> Maybe Language
+parseLanguage :: CodeBlockProps -> Maybe Language
 parseLanguage { props } = case props.children.props.className of
   "language-purescript" -> Just PureScript
   "language-typescript" -> Just TypeScript
@@ -66,5 +72,25 @@ parseLanguage { props } = case props.children.props.className of
   "language-rust" -> Just Rust
   _ -> Nothing
 
-type InternalPropsType
-  = { props :: { children :: { props :: { className :: String } } } }
+style :: Style
+style =
+  E.css
+    { backgroundColor: E.color (Color.hsla 95.0 1.0 0.5 1.0)
+    , padding: E.str "0.15em 0.2em 0.05em"
+    , "code":
+        E.nested do
+          E.css
+            { display: E.str "block"
+            }
+    }
+
+-- -- TODO: Add styles ...  do I need to pass down class name? why does E.element insist on it?
+-- mkLanguageButton :: Component { handleClick :: Effect Unit, language :: Language }
+-- mkLanguageButton = do
+--   component "LanguageButton" \props ->
+--     pure
+--       ( R.button
+--           { onClick: handler_ props.handleClick
+--           , children: [ R.text (show props.language) ]
+--           }
+--       )

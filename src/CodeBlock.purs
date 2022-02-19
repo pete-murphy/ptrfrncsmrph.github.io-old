@@ -1,4 +1,6 @@
-module CodeBlock where
+module CodeBlock
+  ( mkCodeBlock
+  ) where
 
 import Prelude
 import Data.Nullable (Nullable)

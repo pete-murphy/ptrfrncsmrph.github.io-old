@@ -10,7 +10,8 @@ const withMDX = require("@next/mdx")({
 
 module.exports = withMDX({
   webpack(config, _options) {
-    config.node = { fs: "empty", child_process: "empty" };
+    // config.node = { fs: "empty", child_process: "empty" };
+    config.node = {};
     config.resolve.alias["@purescript"] = path.join(__dirname, "output");
     return config;
   },

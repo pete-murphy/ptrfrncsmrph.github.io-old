@@ -2,11 +2,18 @@
 module.exports = {
   "posts_": [
     {
+      "filePath": "pages/posts/tic-tac-toe.mdx",
+      "urlPath": "/posts/tic-tac-toe",
+      "title": "Tutorial Intro to React in PureScript",
+      "date": "2020-12-31T05:00:00.000Z",
+      "description": "Building tic-tac-toe in PureScript (using `purescript-react-basic-hooks`)"
+    },
+    {
       "filePath": "pages/posts/post-1.mdx",
       "urlPath": "/posts/post-1",
-      "title": "Example",
+      "title": "First post",
       "date": "2020-10-31T04:00:00.000Z",
-      "description": "Example"
+      "description": "An example description"
     }
   ]
 };

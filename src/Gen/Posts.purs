@@ -1,11 +1,11 @@
-module Posts where
+module Gen.Posts where
 
-type Post_
-  = { filePath :: String
-    , urlPath :: String
-    , title :: String
-    , date :: String
-    , description :: String
-    }
+type Post =
+  { filePath :: String
+  , urlPath :: String
+  , title :: String
+  , date :: String
+  , description :: String
+  }
 
-foreign import posts_ :: Array Post_
+foreign import posts_ :: Array Post

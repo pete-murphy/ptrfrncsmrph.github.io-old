@@ -2,18 +2,18 @@ import { page as Page } from "@purescript/Page";
 export default Page;
 
 export const meta = {
+  // This needs to match the type of Page.Props.meta
+  // The title will be rendered by Page.mkPage
+  title: "First post",
   date: "October 31, 2020",
-  description: "Example",
+  description: "An example description",
 };
 
-# Example
-
-Isn't it great!
+Hello world!
 
 ### Interface
 
 <MultiCodeBlock>
-
 
 ```typescript
 // interface, abstract type: An interface
@@ -36,4 +36,3 @@ import Prelude
 ```
 
 </MultiCodeBlock>
-

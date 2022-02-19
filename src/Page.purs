@@ -1,56 +1,52 @@
 module Page where
 
 import Prelude
+
 import CodeBlock as CodeBlock
-import Data.Tuple.Nested ((/\))
-import Effect.Unsafe (unsafePerformEffect)
-import Foreign.Object (fromFoldable)
+import Data.Array ((:))
+import Effect.Unsafe as Unsafe
+import Foreign.Object as Object
 import Layout as Layout
 import MultiCodeBlock as MultiCodeBlock
 import Next as Next
-import React (ReactElement)
-import React.Basic.Hooks (Component, JSX, component)
-import React.Basic.Hooks as React
-import React.Basic.DOM as R
-import Unsafe.Coerce (unsafeCoerce)
+import React.Basic.Hooks (Component, JSX, (/\))
+import React.Basic.Hooks as Hooks
+import React.Basic.DOM as DOM
+import Unsafe.Coerce as Coerce
 
-mkPage :: Component { children :: Array JSX }
+type Props =
+  { children :: Array JSX
+  , meta ::
+      { title :: String
+      , description :: String
+      , date :: String
+      }
+  }
+
+mkPage :: Component Props
 mkPage = do
   layout <- Layout.mkLayout
   mdxProvider <- Next.mkMDXProvider
   multiCodeBlock <- MultiCodeBlock.mkMultiCodeBlock
   codeBlock <- CodeBlock.mkCodeBlock
-  component "Page" \{ children } -> React.do
-    -- useEffectOnce do
-    --   log $ unsafeCoerce children
-    --   pure mempty
+
+  Hooks.component "Page" \props -> Hooks.do
     pure
-      $ mdxProvider
+      ( mdxProvider
           { children:
               [ layout
-                  { children
-                  , description: "Blog"
-                  , pageTitle: "Blog"
+                  { children: DOM.h1_ [ DOM.text props.meta.title ] : props.children
+                  , description: props.meta.description
+                  , pageTitle: props.meta.title
                   }
               ]
           , components:
-              fromFoldable
-                [ "code" /\ unsafeCoerce codeBlock
-                , "MultiCodeBlock" /\ unsafeCoerce multiCodeBlock
+              Object.fromFoldable
+                [ "code" /\ Coerce.unsafeCoerce codeBlock
+                , "MultiCodeBlock" /\ Coerce.unsafeCoerce multiCodeBlock
                 ]
           }
+      )
 
--- mkCode :: Component { className :: String }
--- mkCode = do 
--- type Component'
---   = { className :: String
---     , element :: JSX
---     , name :: String
---     }
--- wrap :: Component' -> forall r. Component { className :: String | r }
--- wrap c = do
---   component c.name \props ->
---     pure  c.element
--- | Interop
-page :: { children :: Array JSX } -> JSX
-page = unsafePerformEffect mkPage
+page :: Props -> JSX
+page = Unsafe.unsafePerformEffect mkPage

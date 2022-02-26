@@ -15,6 +15,7 @@ to generate this file without the comments in this block.
   [ "arrays"
   , "colors"
   , "console"
+  , "control"
   , "debug"
   , "effect"
   , "foldable-traversable"
@@ -32,6 +33,7 @@ to generate this file without the comments in this block.
   , "react-basic-hooks"
   , "transformers"
   , "tuples"
+  , "typelevel-prelude"
   , "unsafe-coerce"
   ]
 , packages = ./packages.dhall
